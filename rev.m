@@ -1,13 +1,22 @@
 [signal,sampleRate,numSamples] = wavread('test.wav');
 sound(signal,sampleRate);
 
-%Y = fft(signal);
 
+
+figure; subplot(2,1,1); plot(signal); ylim([-1 2]); xlabel('Samples','fontsize',7);
+
+Y = fft(signal);
+Y = abs(Y(1:floor(length(Y)/2)));
+F = linspace(0,sampleRate/2,length(Y))';
+subplot(2,1,2);
+semilogy(F,Y); ylabel('dB'); xlabel('Frequency','fontsize',7); xlim([0 sampleRate/2]);
+saveas(gcf,[person '-glottalpulse'],'png');
+  
 
 % Using windows function
-M = length(signal); 
-w = hanning(M); 
+w = hanning(numSamples); 
 yw = w'.*signal; 
+
 
 % %without window
 % yw = y;
@@ -33,8 +42,3 @@ my = 2*(abs(Y)/length(yw));
 F = f(i);
 
 
-
-plot(Y,P1);
-title('Single-Sided Amplitude Spectrum of S(t)');
-xlabel('f (Hz)');
-ylabel('|P1(f)|');
